@@ -60,6 +60,10 @@ import {
   ControlTowerDrillDownDrawer,
   DrillDownTarget
 } from './ControlTowerDrillDownDrawer';
+import { ProductValueChainOverview } from './ProductValueChainOverview';
+import { CustomerLifecycleSummaryWidget } from './CustomerLifecycleSummaryWidget';
+import { WorkloadBottleneckMatrix } from './WorkloadBottleneckMatrix';
+import { OmniChannelMarketingPerformance } from './OmniChannelMarketingPerformance';
 import {
   Order,
   Customer,
@@ -678,7 +682,48 @@ export const EnterpriseControlTower: React.FC<EnterpriseControlTowerProps> = ({
       </div>
 
       {/* ========================================================================= */}
-      {/* 5. INTERACTIVE DRILL-DOWN DETAIL DRAWER                                   */}
+      {/* 5. END-TO-END PRODUCT VALUE CHAIN OVERVIEW                                */}
+      {/* ========================================================================= */}
+      <ProductValueChainOverview
+        onSelectStage={(cat) => {
+          const matched = businessFunctions.find((b) => b.category === cat);
+          if (matched) {
+            setDrillDownTarget({ type: 'function', data: matched });
+          }
+        }}
+      />
+
+      {/* ========================================================================= */}
+      {/* 6. CUSTOMER LIFECYCLE JOURNEY (4 PHASES)                                  */}
+      {/* ========================================================================= */}
+      <CustomerLifecycleSummaryWidget
+        customers={customers}
+        crmTasks={crmTasks}
+        onSelectCustomer={onSelectCustomer}
+        onNavigateToCrm={() => onNavigateToView && onNavigateToView('crm')}
+      />
+
+      {/* ========================================================================= */}
+      {/* 7. OMNI-CHANNEL MARKETING & GENSEO STRIP                                 */}
+      {/* ========================================================================= */}
+      <OmniChannelMarketingPerformance
+        onNavigateToGenSeo={() => onNavigateToView && onNavigateToView('genseo')}
+      />
+
+      {/* ========================================================================= */}
+      {/* 8. WORKLOAD & BOTTLENECK ALLOCATION MATRIX                                */}
+      {/* ========================================================================= */}
+      <WorkloadBottleneckMatrix
+        users={users}
+        crmTasks={crmTasks}
+        onOpenDelegateTask={(assignee) => {
+          const targetKpi = executiveKpis[0];
+          setDrillDownTarget({ type: 'kpi', data: targetKpi });
+        }}
+      />
+
+      {/* ========================================================================= */}
+      {/* 9. INTERACTIVE DRILL-DOWN DETAIL DRAWER                                   */}
       {/* ========================================================================= */}
       <ControlTowerDrillDownDrawer
         target={drillDownTarget}
