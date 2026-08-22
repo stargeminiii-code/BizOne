@@ -5,7 +5,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig(() => {
   return {
-    // GitHub Pages: https://stargeminiii-code.github.io/BizOne/
+    // Production: https://wiup.vn/
     base: '/',
 
     plugins: [
