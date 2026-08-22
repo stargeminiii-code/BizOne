@@ -5,6 +5,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig(() => {
   return {
+    // GitHub Pages: https://stargeminiii-code.github.io/BizOne/
     base: '/BizOne/',
 
     plugins: [
@@ -22,8 +23,7 @@ export default defineConfig(() => {
       // HMR is disabled in AI Studio when DISABLE_HMR=true.
       hmr: process.env.DISABLE_HMR !== 'true',
 
-      // Disable file watching when DISABLE_HMR=true
-      // to reduce CPU usage during AI Studio edits.
+      // Disable file watching when DISABLE_HMR=true.
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
     },
   };
