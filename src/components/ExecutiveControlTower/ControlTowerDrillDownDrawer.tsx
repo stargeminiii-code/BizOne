@@ -155,7 +155,7 @@ export const ControlTowerDrillDownDrawer: React.FC<ControlTowerDrillDownDrawerPr
     onDelegateTask({
       title: taskTitle,
       assignedTo: taskAssignee,
-      notes: `[Giao việc trực tiếp từ Control Tower] - Chỉ số liên kết: ${title} (${code})\nNội dung: ${taskRequirements}\nMục tiêu cần đạt: ${taskTargetOutcome}`,
+      notes: `[Giao việc trực tiếp từ Dashboard] - Chỉ số liên kết: ${title} (${code})\nNội dung: ${taskRequirements}\nMục tiêu cần đạt: ${taskTargetOutcome}`,
       dueDate: taskDeadline,
       priority: taskPriority,
       status: 'pending',
@@ -596,7 +596,7 @@ export const ControlTowerDrillDownDrawer: React.FC<ControlTowerDrillDownDrawerPr
               <div>
                 <h3 className="text-sm font-black text-slate-900 flex items-center gap-2">
                   <UserCheck className="w-4 h-4 text-emerald-600" />
-                  <span>GIAO VIỆC & CHỈ ĐẠO TRỰC TIẾP TỪ CONTROL TOWER</span>
+                  <span>GIAO VIỆC & CHỈ ĐẠO TRỰC TIẾP TỪ DASHBOARD</span>
                 </h3>
                 <p className="text-xs text-slate-500 mt-0.5">
                   Tác vụ sẽ được đồng bộ ngay lập tức vào danh mục công việc của nhân sự và báo cáo tiến độ về Dashboard.
@@ -713,14 +713,14 @@ export const ControlTowerDrillDownDrawer: React.FC<ControlTowerDrillDownDrawerPr
 
         {/* Drawer Footer */}
         <div className="bg-white px-5 py-3 border-t border-slate-200 flex items-center justify-between text-xs">
-          <span className="text-slate-500">
-            BizOne Enterprise Executive Control Tower • Single Source of Truth
+          <span className="text-slate-500 font-medium">
+            BizOne ERP • Quản trị và Điều hành Doanh nghiệp
           </span>
           <button
             onClick={onClose}
             className="px-4 py-1.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl font-bold transition-colors"
           >
-            Đóng Panel
+            Đóng
           </button>
         </div>
       </div>

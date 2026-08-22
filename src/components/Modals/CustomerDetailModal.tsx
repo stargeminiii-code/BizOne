@@ -1126,7 +1126,7 @@ export const CustomerDetailModal: React.FC<CustomerDetailModalProps> = ({
         {/* Footer */}
         <div className="p-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between shrink-0">
           <div className="text-xs text-slate-500 font-mono">
-            Hồ sơ khách hàng • ERP SheetStore
+            Hồ sơ khách hàng • BizOne ERP
           </div>
           <button
             onClick={onClose}

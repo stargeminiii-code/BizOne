@@ -92,7 +92,7 @@ export const TaskGanttView: React.FC<TaskGanttViewProps> = ({
     const clampedStart = Math.max(1, Math.min(31, startDay));
     const clampedEnd = Math.max(clampedStart, Math.min(31, endDay));
     const leftPercent = ((clampedStart - 1) / 31) * 100;
-    const widthPercent = Math.max(3.2, ((clampedEnd - clampedStart + 1) / 31) * 100);
+    const widthPercent = Math.max(5.0, ((clampedEnd - clampedStart + 1) / 31) * 100);
 
     return { left: `${leftPercent}%`, width: `${widthPercent}%` };
   };
@@ -281,13 +281,20 @@ export const TaskGanttView: React.FC<TaskGanttViewProps> = ({
                           title="Hôm nay 21/08"
                         />
 
-                        {/* Gantt Bar */}
+                        {/* Gantt Bar with minWidth and checklist icons */}
                         <div
-                          className={`absolute h-7 rounded-lg ${theme.bar} p-1 shadow-xs flex items-center justify-between px-2 text-[10px] font-bold z-10 transition-transform group-hover:scale-y-105`}
+                          className={`absolute h-7 rounded-lg ${theme.bar} p-1 shadow-xs flex items-center justify-between px-2 text-[10px] font-bold z-10 transition-transform group-hover:scale-y-105 min-w-[45px]`}
                           style={{ left: pos.left, width: pos.width }}
                         >
                           <span className="truncate pr-1">{task.customerName}</span>
-                          <span className="shrink-0 text-[9px] bg-black/20 px-1 rounded">{progress}%</span>
+                          <div className="flex items-center gap-1 shrink-0">
+                            {task.subtasks && task.subtasks.length > 0 && (
+                              <span className="text-[9px] bg-black/30 px-1 rounded font-mono" title={`${task.subtasks.filter((s) => s.completed).length}/${task.subtasks.length} mục đã xong`}>
+                                ☑ {task.subtasks.filter((s) => s.completed).length}/{task.subtasks.length}
+                              </span>
+                            )}
+                            <span className="text-[9px] bg-black/20 px-1 rounded">{progress}%</span>
+                          </div>
                         </div>
                       </div>
                     </div>

@@ -32,8 +32,8 @@ export const CustomerLifecycleSummaryWidget: React.FC<CustomerLifecycleSummaryWi
   const phases = [
     {
       id: 'pre-sales',
-      name: '1. TRƯỚC BÁN (PRE-SALES)',
-      subStages: 'Lead $\\rightarrow$ Khảo sát $\\rightarrow$ Đánh giá nhu cầu',
+      name: '1. Trước Bán',
+      subStages: 'Lead → Khảo sát → Nhu cầu',
       customerCount: 142,
       progressPercent: 82,
       activeTasks: 48,
@@ -43,8 +43,8 @@ export const CustomerLifecycleSummaryWidget: React.FC<CustomerLifecycleSummaryWi
     },
     {
       id: 'during-sales',
-      name: '2. TRONG BÁN (DURING SALES)',
-      subStages: 'Báo giá $\\rightarrow$ Đàm phán $\\rightarrow$ Dự thảo HĐ',
+      name: '2. Trong Bán',
+      subStages: 'Báo giá → Đàm phán → Dự thảo HĐ',
       customerCount: 68,
       progressPercent: 65,
       activeTasks: 35,
@@ -54,8 +54,8 @@ export const CustomerLifecycleSummaryWidget: React.FC<CustomerLifecycleSummaryWi
     },
     {
       id: 'closing',
-      name: '3. CHỐT BÁN (CLOSING)',
-      subStages: 'Ký hợp đồng $\\rightarrow$ Đặt cọc $\\rightarrow$ Lên đơn',
+      name: '3. Chốt Bán',
+      subStages: 'Ký hợp đồng → Đặt cọc → Lên đơn',
       customerCount: 29,
       progressPercent: 91,
       activeTasks: 18,
@@ -65,8 +65,8 @@ export const CustomerLifecycleSummaryWidget: React.FC<CustomerLifecycleSummaryWi
     },
     {
       id: 'after-sales',
-      name: '4. SAU BÁN (AFTER SALES)',
-      subStages: 'Giao hàng $\\rightarrow$ Nghiệm thu $\\rightarrow$ CSKH $\\rightarrow$ Upsell',
+      name: '4. Sau Bán',
+      subStages: 'Giao hàng → Nghiệm thu → CSKH',
       customerCount: 310,
       progressPercent: 96,
       activeTasks: 52,
@@ -111,11 +111,11 @@ export const CustomerLifecycleSummaryWidget: React.FC<CustomerLifecycleSummaryWi
               Customer Lifecycle Engine
             </span>
             <h2 className="text-xs font-black uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
-              <span>HÀNH TRÌNH KHÁCH HÀNG & TIẾN ĐỘ CHUYỂN ĐỔI (CUSTOMER JOURNEY PIPELINE)</span>
+              <span>HÀNH TRÌNH KHÁCH HÀNG & TIẾN ĐỘ CHUYỂN ĐỔI</span>
             </h2>
           </div>
           <p className="text-xs text-slate-500 mt-0.5">
-            Quản trị tiến độ khách hàng 4 giai đoạn: Trước bán $\rightarrow$ Trong bán $\rightarrow$ Chốt bán $\rightarrow$ Sau bán. Bám sát từng mốc giao dịch.
+            Quản trị tiến độ khách hàng 4 giai đoạn: Trước bán → Trong bán → Chốt bán → Sau bán
           </p>
         </div>
 

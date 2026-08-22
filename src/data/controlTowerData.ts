@@ -3,6 +3,7 @@ import { OrgLevel, OrgScope } from '../types';
 export interface BusinessFunctionMetric {
   id: string;
   name: string;
+  nameEn?: string;
   category:
     | 'sales'
     | 'marketing'
@@ -428,7 +429,8 @@ export const INITIAL_EXECUTIVE_KPIS: EnterpriseExecutiveKpi[] = [
 export const INITIAL_BUSINESS_FUNCTIONS: BusinessFunctionMetric[] = [
   {
     id: 'bf-sales',
-    name: 'KINH DOANH (SALES)',
+    name: 'Kinh Doanh',
+    nameEn: 'Sales & Revenue',
     category: 'sales',
     headOfDepartment: 'Trần Văn Nam (Phó TGĐ Kinh Doanh)',
     planValue: 280000000000,
@@ -481,7 +483,8 @@ export const INITIAL_BUSINESS_FUNCTIONS: BusinessFunctionMetric[] = [
   },
   {
     id: 'bf-marketing',
-    name: 'MARKETING',
+    name: 'Marketing',
+    nameEn: 'Marketing & Growth',
     category: 'marketing',
     headOfDepartment: 'Nguyễn Bích Ngọc (GĐ Marketing)',
     planValue: 8500000000,
@@ -525,7 +528,8 @@ export const INITIAL_BUSINESS_FUNCTIONS: BusinessFunctionMetric[] = [
   },
   {
     id: 'bf-cskh',
-    name: 'CHĂM SÓC KHÁCH HÀNG (CSKH)',
+    name: 'Chăm Sóc Khách Hàng',
+    nameEn: 'Customer Service',
     category: 'cskh',
     headOfDepartment: 'Hoàng Kim Dung (Trưởng Phòng CSKH)',
     planValue: 95,
@@ -558,7 +562,8 @@ export const INITIAL_BUSINESS_FUNCTIONS: BusinessFunctionMetric[] = [
   },
   {
     id: 'bf-finance',
-    name: 'TÀI CHÍNH - KẾ TOÁN',
+    name: 'Tài Chính - Kế Toán',
+    nameEn: 'Finance & Accounting',
     category: 'finance',
     headOfDepartment: 'Nguyễn Văn Hùng (Giám Đốc Tài Chính - CFO)',
     planValue: 45000000000,
@@ -601,7 +606,8 @@ export const INITIAL_BUSINESS_FUNCTIONS: BusinessFunctionMetric[] = [
   },
   {
     id: 'bf-warehouse',
-    name: 'KHO VẬN & FIFO (WAREHOUSE)',
+    name: 'Kho Vận & FIFO',
+    nameEn: 'Warehouse & Inventory',
     category: 'warehouse',
     headOfDepartment: 'Nguyễn Văn Toàn (Trưởng Ban Quản Lý Kho)',
     planValue: 62000000000,
@@ -645,7 +651,8 @@ export const INITIAL_BUSINESS_FUNCTIONS: BusinessFunctionMetric[] = [
   },
   {
     id: 'bf-production',
-    name: 'SẢN XUẤT (PRODUCTION & FACTORY)',
+    name: 'Sản Xuất & Nhà Máy',
+    nameEn: 'Manufacturing & Factory',
     category: 'production',
     headOfDepartment: 'Kỹ Sư Đỗ Đức Thịnh (Giám Đốc Khối Sản Xuất)',
     planValue: 120000,
@@ -688,7 +695,8 @@ export const INITIAL_BUSINESS_FUNCTIONS: BusinessFunctionMetric[] = [
   },
   {
     id: 'bf-procurement',
-    name: 'MUA HÀNG & NHÀ CUNG CẤP (PROCUREMENT)',
+    name: 'Mua Hàng & NCC',
+    nameEn: 'Procurement & Sourcing',
     category: 'procurement',
     headOfDepartment: 'Trương Mỹ Hạnh (Trưởng Phòng Mua Hàng)',
     planValue: 42000000000,
@@ -720,7 +728,8 @@ export const INITIAL_BUSINESS_FUNCTIONS: BusinessFunctionMetric[] = [
   },
   {
     id: 'bf-supply-chain',
-    name: 'SUPPLY CHAIN (CHUỖI CUNG ỨNG)',
+    name: 'Chuỗi Cung Ứng',
+    nameEn: 'Supply Chain',
     category: 'supply_chain',
     headOfDepartment: 'Nguyễn Thanh Tùng (Giám Đốc Supply Chain)',
     planValue: 98,
@@ -751,7 +760,8 @@ export const INITIAL_BUSINESS_FUNCTIONS: BusinessFunctionMetric[] = [
   },
   {
     id: 'bf-logistics',
-    name: 'LOGISTICS & VẬN TẢI',
+    name: 'Logistics & Vận Tải',
+    nameEn: 'Logistics & Transport',
     category: 'logistics',
     headOfDepartment: 'Lâm Văn Khoa (Trưởng Ban Điều Phối Giao Vận)',
     planValue: 4200,
@@ -783,7 +793,8 @@ export const INITIAL_BUSINESS_FUNCTIONS: BusinessFunctionMetric[] = [
   },
   {
     id: 'bf-rd',
-    name: 'R&D & PHÁT TRIỂN SẢN PHẨM',
+    name: 'Nghiên Cứu & Phát Triển',
+    nameEn: 'R&D & Innovation',
     category: 'rd',
     headOfDepartment: 'TS. Phan Thanh Sơn (Viện Trưởng R&D)',
     planValue: 6,
@@ -813,7 +824,8 @@ export const INITIAL_BUSINESS_FUNCTIONS: BusinessFunctionMetric[] = [
   },
   {
     id: 'bf-qa-qc',
-    name: 'QA/QC & KIỂM SOÁT CHẤT LƯỢNG',
+    name: 'Kiểm Soát Chất Lượng',
+    nameEn: 'Quality Assurance (QA/QC)',
     category: 'qa_qc',
     headOfDepartment: 'Vũ Thị Minh Hạnh (Trưởng Ban QA/QC)',
     planValue: 99,
@@ -843,7 +855,8 @@ export const INITIAL_BUSINESS_FUNCTIONS: BusinessFunctionMetric[] = [
   },
   {
     id: 'bf-retail',
-    name: 'RETAIL & SHOWROOM CHUỖI BÁN LẺ',
+    name: 'Chuỗi Bán Lẻ',
+    nameEn: 'Retail & Showrooms',
     category: 'retail',
     headOfDepartment: 'Đặng Quốc Bảo (Giám Đốc Khối Bán Lẻ)',
     planValue: 25000000000,
@@ -886,7 +899,8 @@ export const INITIAL_BUSINESS_FUNCTIONS: BusinessFunctionMetric[] = [
   },
   {
     id: 'bf-ecommerce',
-    name: 'E-COMMERCE & DIGITAL COMMERCE',
+    name: 'Thương Mại Điện Tử',
+    nameEn: 'E-Commerce & Digital',
     category: 'ecommerce',
     headOfDepartment: 'Trịnh Hoài Nam (Trưởng Ban Thương Mại Điện Tử)',
     planValue: 35000000000,
@@ -919,7 +933,8 @@ export const INITIAL_BUSINESS_FUNCTIONS: BusinessFunctionMetric[] = [
   },
   {
     id: 'bf-hr',
-    name: 'NHÂN SỰ & TỔ CHỨC (HR & ADMIN)',
+    name: 'Nhân Sự & Tổ Chức',
+    nameEn: 'Human Resources (HR)',
     category: 'hr',
     headOfDepartment: 'Nguyễn Thị Phương Thảo (GĐ Nhân Sự)',
     planValue: 150,
@@ -950,7 +965,8 @@ export const INITIAL_BUSINESS_FUNCTIONS: BusinessFunctionMetric[] = [
   },
   {
     id: 'bf-it',
-    name: 'IT & HỆ THỐNG CÔNG NGHỆ',
+    name: 'Công Nghệ Thông Tin',
+    nameEn: 'Information Tech (IT)',
     category: 'it',
     headOfDepartment: 'Kỹ Sư Trần Tuấn Kiệt (CTO)',
     planValue: 99.9,
@@ -980,7 +996,8 @@ export const INITIAL_BUSINESS_FUNCTIONS: BusinessFunctionMetric[] = [
   },
   {
     id: 'bf-operations',
-    name: 'HỖ TRỢ & VẬN HÀNH CHUNG',
+    name: 'Vận Hành Chung',
+    nameEn: 'General Operations',
     category: 'operations',
     headOfDepartment: 'Hoàng Văn Thắng (Chánh Văn Phòng)',
     planValue: 98,

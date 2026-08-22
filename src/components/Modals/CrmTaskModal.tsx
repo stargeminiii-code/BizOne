@@ -57,6 +57,9 @@ export const CrmTaskModal: React.FC<CrmTaskModalProps> = ({
   const [assignedTo, setAssignedTo] = useState(
     taskToEdit?.assignedTo || 'Lê Hoàng Nam (Sales KV1)'
   );
+  const [field, setField] = useState(
+    taskToEdit?.field || 'CSKH & Bán hàng'
+  );
   const [note, setNote] = useState(
     taskToEdit?.note ||
       'Liên hệ giới thiệu bảng báo giá các mặt hàng thép hộp mạ kẽm và tôn cuộn mới về kho. Tư vấn chính sách chiết khấu và ưu đãi vận chuyển.'
@@ -73,6 +76,7 @@ export const CrmTaskModal: React.FC<CrmTaskModalProps> = ({
       setDueDate(taskToEdit.dueDate);
       setDueTime(taskToEdit.dueTime || '09:30');
       setAssignedTo(taskToEdit.assignedTo);
+      setField(taskToEdit.field || 'CSKH & Bán hàng');
       setNote(taskToEdit.note || '');
     } else if (defaultCustomerName) {
       const match = customers.find((c) =>
@@ -132,6 +136,7 @@ export const CrmTaskModal: React.FC<CrmTaskModalProps> = ({
       dueDate,
       dueTime,
       assignedTo,
+      field,
       status: taskToEdit?.status || 'pending',
       note: note.trim(),
       createdAt: taskToEdit?.createdAt || new Date().toISOString().slice(0, 16).replace('T', ' '),
@@ -272,19 +277,39 @@ export const CrmTaskModal: React.FC<CrmTaskModalProps> = ({
             </div>
           </div>
 
-          {/* Assigned Staff */}
-          <div>
-            <label className="block font-bold text-slate-700 mb-1">Nhân viên phụ trách thực hiện</label>
-            <select
-              value={assignedTo}
-              onChange={(e) => setAssignedTo(e.target.value)}
-              className="w-full border border-slate-300 rounded-xl px-3 py-2 bg-white text-slate-800 font-semibold focus:outline-none"
-            >
-              <option value="Lê Hoàng Nam (Sales KV1)">Lê Hoàng Nam (Sales KV1)</option>
-              <option value="Nguyễn Văn An (Trưởng nhóm)">Nguyễn Văn An (Trưởng nhóm)</option>
-              <option value="Trần Thị Mai (Kế toán)">Trần Thị Mai (Kế toán)</option>
-              <option value="Phạm Quốc Huy (Sales KV2)">Phạm Quốc Huy (Sales KV2)</option>
-            </select>
+          {/* Assigned Staff & Field / Lĩnh vực */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label className="block font-bold text-slate-700 mb-1">Nhân viên phụ trách</label>
+              <select
+                value={assignedTo}
+                onChange={(e) => setAssignedTo(e.target.value)}
+                className="w-full border border-slate-300 rounded-xl px-3 py-2 bg-white text-slate-800 font-semibold focus:outline-none"
+              >
+                <option value="Lê Hoàng Nam (Sales KV1)">Lê Hoàng Nam (Sales KV1)</option>
+                <option value="Nguyễn Văn An (Trưởng nhóm)">Nguyễn Văn An (Trưởng nhóm)</option>
+                <option value="Trần Thị Mai (Kế toán)">Trần Thị Mai (Kế toán)</option>
+                <option value="Phạm Quốc Huy (Sales KV2)">Phạm Quốc Huy (Sales KV2)</option>
+                <option value="Vũ Thị Lan (CSKH)">Vũ Thị Lan (CSKH)</option>
+                <option value="Hoàng Đức Thịnh (Kho vận)">Hoàng Đức Thịnh (Kho vận)</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block font-bold text-slate-700 mb-1">Lĩnh vực / Phòng ban</label>
+              <select
+                value={field}
+                onChange={(e) => setField(e.target.value)}
+                className="w-full border border-slate-300 rounded-xl px-3 py-2 bg-white text-slate-800 font-semibold focus:outline-none"
+              >
+                <option value="CSKH & Bán hàng">CSKH & Bán hàng</option>
+                <option value="Kế toán & Tài chính">Kế toán & Tài chính</option>
+                <option value="Mua hàng & Kho vận">Mua hàng & Kho vận</option>
+                <option value="Sản xuất & Kỹ thuật">Sản xuất & Kỹ thuật</option>
+                <option value="Marketing & SEO">Marketing & SEO</option>
+                <option value="Ban Giám Đốc">Ban Giám Đốc</option>
+              </select>
+            </div>
           </div>
 
           {/* Note / Script */}

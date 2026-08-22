@@ -324,7 +324,7 @@ export function generateProductCode(productName: string, brand?: string): string
 }
 
 /**
- * Intelligent Variant SKU Generation according to enterprise ERP standard
+ * Intelligent Variant SKU Generation according to BizOne ERP standard
  * Examples:
  * - Parent: "VCCCM330-PRM", Variant: "1 Hộp" -> "VCCCM330-PRM-C1"
  * - Parent: "VCCCM330-PRM", Variant: "Combo 2 Hộp" -> "VCCCM330-PRM-C2"

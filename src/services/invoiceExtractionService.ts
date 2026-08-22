@@ -18,7 +18,7 @@ import {
 } from '../types';
 import { fifoEngine } from './fifoEngine';
 
-// Default company Tax Code (BizOne / SheetStore ERP company profile)
+// Default company Tax Code (BizOne ERP company profile)
 export const DEFAULT_COMPANY_TAX_CODE = '0108998822';
 export const DEFAULT_COMPANY_NAME = 'CÔNG TY CỔ PHẦN THƯƠNG MẠI & PHÂN PHỐI VIỆT PHÁT';
 

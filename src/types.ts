@@ -3,10 +3,13 @@ export type ViewMode =
   | 'enterprise-planning'
   | 'pos'
   | 'orders'
+  | 'beverages'
   | 'inventory'
   | 'variant-definitions'
   | 'stockcards'
   | 'crm'
+  | 'marketing'
+  | 'genseo'
   | 'purchasing'
   | 'suppliers'
   | 'cashflow'
@@ -467,6 +470,9 @@ export interface Customer {
   assignedStaff?: string; // Sales / Nhân sự phụ trách
   assignedStaffRole?: string; // Chức vụ / Phòng ban Sales
   assignedStaffPhone?: string; // SĐT Sales phụ trách
+  branchId?: string;
+  createdBy?: string;
+  creator?: string;
   status?: 'active' | 'inactive';
   aiNotes?: string;
   notes?: string;
@@ -521,6 +527,8 @@ export interface CrmTask {
   customerCode?: string;
   opportunityId?: string;
   department?: string;
+  field?: string; // Lĩnh vực (Kinh doanh, Kho bãi, Kế toán, SEO/Marketing, Nhân sự, Vận hành, R&D...)
+  workField?: string; // Alias for field
   title: string;
   type: CrmTaskType;
   priority: CrmTaskPriority;
@@ -882,6 +890,8 @@ export interface CashTransaction {
   paymentMethod: PaymentMethod;
   payerOrPayee: string;
   createdAt: string;
+  createdBy?: string;
+  branchId?: string;
   referenceCode?: string;
 }
 
@@ -920,6 +930,10 @@ export type UserRole =
   | 'accountant'
   | 'sales'
   | 'purchasing'
+  | 'marketing'
+  | 'retail_staff'
+  | 'online_staff'
+  | 'demo'
   | 'custom';
 
 export type PermissionAction =
@@ -943,6 +957,8 @@ export type UserStatus = 'active' | 'inactive' | 'locked' | 'suspended' | 'pendi
 export interface UserSession {
   id: string;
   userId: string;
+  token?: string;
+  tokenExpiry?: string;
   deviceName: string;
   deviceType: 'desktop' | 'mobile' | 'tablet';
   os: string;
@@ -960,7 +976,9 @@ export interface UserAccount {
   email: string;
   name: string;
   phone?: string;
+  passwordHash?: string;
   employeeCode?: string;
+  tenant?: 'enterprise' | 'demo'; // Isolated Tenant separation (Enterprise vs Demo Sandbox)
   department?: string; // Ban Giám Đốc, Kho Vận, Kế Toán - Tài Chính, Kinh Doanh & CSKH, Thu Mua & Cung Ứng, CNTT & Hệ Thống
   position?: string;
   avatar?: string;
@@ -1005,6 +1023,8 @@ export interface UserAccount {
     user_management?: PermissionAction[];
     automation_engine?: PermissionAction[];
     api_integrations?: PermissionAction[];
+    beverages?: PermissionAction[];
+    marketing?: PermissionAction[];
     settings?: PermissionAction[];
   };
   sessions?: UserSession[];
@@ -1865,6 +1885,107 @@ export interface EnterpriseForecastItem {
   status: 'on_track' | 'warning' | 'critical' | 'exceeded';
   mitigationAction?: string;
 }
+
+// =========================================================================
+// GEN-SEO & KEYWORD PLANNING TYPES
+// =========================================================================
+
+export type KeywordNodeType = 'pillar' | 'cluster' | 'article' | 'variant';
+export type KeywordIntent = 'informational' | 'transactional' | 'commercial' | 'navigational';
+export type ArticleStage = 'research' | 'outline' | 'drafting' | 'review' | 'published';
+
+export interface KeywordNode {
+  id: string;
+  label: string;
+  type: KeywordNodeType;
+  parentId?: string;
+  pillarId?: string;
+  searchVolume: number;
+  difficulty: number; // 0 - 100
+  cpc: number; // VNĐ
+  intent: KeywordIntent;
+  dateCreated: string;
+  daysAgo: number;
+  lastUpdated: string;
+  status: 'planned' | 'in_progress' | 'published' | 'archived';
+  suggestedArticleTitle?: string;
+  articleId?: string;
+  ranking?: number;
+  tags?: string[];
+  x?: number;
+  y?: number;
+  vx?: number;
+  vy?: number;
+}
+
+export interface KeywordEdge {
+  id: string;
+  source: string;
+  target: string;
+  relationType: 'pillar_to_cluster' | 'cluster_to_article' | 'article_to_variant' | 'internal_link';
+}
+
+export interface GenSeoArticle {
+  id: string;
+  title: string;
+  slug: string;
+  keywordId: string;
+  keywordLabel: string;
+  pillarName: string;
+  clusterName: string;
+  author: string;
+  stage: ArticleStage;
+  progressPercent: number; // 0 - 100
+  wordCount: number;
+  targetWordCount: number;
+  seoScore: number; // 0 - 100
+  readabilityScore: number; // 0 - 100
+  focusKeywords: string[];
+  secondaryKeywords: string[];
+  internalLinksCount: number;
+  externalLinksCount: number;
+  contentDraft?: string;
+  outlineSections?: string[];
+  createdAt: string;
+  updatedAt: string;
+  reviewedBy?: string;
+  publishedUrl?: string;
+  notes?: string;
+}
+
+export interface InternalLinkSuggestion {
+  sourceArticleId: string;
+  sourceTitle: string;
+  targetArticleId: string;
+  targetTitle: string;
+  anchorText: string;
+  relevanceScore: number;
+  contextSnippet: string;
+}
+
+export interface MascotConfig {
+  enabled: boolean;
+  minimized: boolean;
+  autoAvoidHover: boolean;
+  position: 'bottom-right' | 'bottom-left' | 'top-right';
+  theme: 'copilot' | 'owl' | 'robot';
+}
+
+// =========================================================================
+// CUSTOM ROLE & GRANULAR PERMISSIONS
+// =========================================================================
+
+export interface CustomRoleDefinition {
+  id: string;
+  name: string;
+  code: string;
+  description: string;
+  badgeColor: string;
+  isSystem: boolean;
+  createdAt: string;
+  permissions: Record<string, PermissionAction[]>;
+}
+
 
 
 

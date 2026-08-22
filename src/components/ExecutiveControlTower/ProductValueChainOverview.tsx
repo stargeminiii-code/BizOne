@@ -221,11 +221,11 @@ export const ProductValueChainOverview: React.FC<ProductValueChainOverviewProps>
               End-to-End Value Chain
             </span>
             <h2 className="text-xs font-black uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
-              <span>CHUỖI GIÁ TRỊ DOANH NGHIỆP KHÉP KÍN (PRODUCT VALUE CHAIN)</span>
+              <span>CHUỖI GIÁ TRỊ DOANH NGHIỆP LIÊN THÔNG</span>
             </h2>
           </div>
           <p className="text-xs text-slate-500 mt-0.5">
-            Theo dõi liên thông toàn diện từ Nghiên cứu & Mua hàng $\rightarrow$ Sản xuất $\rightarrow$ Kho $\rightarrow$ Thương mại $\rightarrow$ Vận chuyển $\rightarrow$ CSKH $\rightarrow$ Tài chính
+            Nghiên cứu & Mua hàng → Sản xuất → Kho → Bán hàng → Giao vận → CSKH → Tài chính
           </p>
         </div>
 

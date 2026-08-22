@@ -1,6 +1,6 @@
 {
-  "name": "BIZONE",
-  "description": "BizOne Enterprise ERP - Unified Enterprise Executive Control Tower hợp nhất toàn diện 16 khối chức năng, quản trị 5 cấp lãnh đạo, phân rã drill-down và điều hành tập trung",
+  "name": "BizOne ERP",
+  "description": "BizOne ERP - Hệ Thống Quản Trị & Điều Hành Doanh Nghiệp Toàn Diện (Hàng Hóa, Đồ Uống, Kho/FIFO, Bán Hàng Đa Kênh, Tài Chính, Integration TMĐT)",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

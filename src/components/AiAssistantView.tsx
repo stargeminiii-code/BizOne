@@ -41,7 +41,7 @@ export const AiAssistantView: React.FC<AiAssistantViewProps> = ({
   >([
     {
       role: 'assistant',
-      content: `Xin chào! Tôi là **SheetStore AI Copilot**, trợ lý thông minh hỗ trợ phân tích kinh doanh, dự báo tồn kho và tối ưu doanh thu.
+      content: `Xin chào! Tôi là **BizOne AI Copilot**, trợ lý thông minh hỗ trợ phân tích kinh doanh, dự báo tồn kho và tối ưu doanh thu.
 Hiện tại:
 - **Doanh thu thuần**: 124.500.000 đ (+12.5%)
 - **Cảnh báo tồn kho**: 5 mặt hàng sắp cạn kho (đặc biệt Thép tấm 5 ly còn 180kg).
@@ -123,7 +123,7 @@ Bạn cần tôi hỗ trợ phân tích hoặc chuẩn bị kế hoạch gì hô
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
-                SheetStore AI Copilot
+                BizOne AI Copilot
               </h1>
               <span className="text-[10px] font-black uppercase tracking-wider bg-emerald-500 text-white px-2 py-0.5 rounded-full">
                 BETA
@@ -220,7 +220,7 @@ Bạn cần tôi hỗ trợ phân tích hoặc chuẩn bị kế hoạch gì hô
               <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
               <span className="font-bold text-slate-800">Trực tuyến - Gemini 2.5 Flash Enterprise</span>
             </div>
-            <span className="text-[11px] text-slate-400">SheetStore AI Engine</span>
+            <span className="text-[11px] text-slate-400">BizOne AI Engine</span>
           </div>
 
           {/* Messages Feed */}

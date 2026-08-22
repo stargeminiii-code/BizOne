@@ -16,6 +16,9 @@ import { SettingsView } from './components/SettingsView';
 import { BankingView } from './components/BankingView';
 import { UsersRolesView } from './components/UsersRolesView';
 import { EnterprisePlanningView } from './components/EnterprisePlanningView';
+import { BeveragesView } from './components/BeveragesView';
+import { MarketingView } from './components/MarketingView';
+import { ApiIntegrationsView } from './components/ApiIntegrationsView';
 
 import { WarehouseDashboardView } from './components/WarehouseDashboardView';
 import { StockIssuesView } from './components/StockIssuesView';
@@ -44,6 +47,15 @@ import { SyncEInvoiceModal } from './components/Modals/SyncEInvoiceModal';
 import { EInvoiceEntryModal } from './components/Modals/EInvoiceEntryModal';
 import { DeleteConfirmModal } from './components/Modals/DeleteConfirmModal';
 import { InvoiceExtractionModal } from './components/Modals/InvoiceExtractionModal';
+import { LoginView } from './components/Auth/LoginView';
+import { ProtectedViewGuard } from './components/Auth/ProtectedViewGuard';
+import { AuthService } from './services/authService';
+import {
+  filterCustomersByScope,
+  filterOrdersByScope,
+  filterTasksByScope,
+  filterCashTransactionsByScope
+} from './utils/dataScopeUtils';
 import { eInvoiceService } from './services/eInvoiceService';
 
 import {
@@ -151,9 +163,36 @@ export default function App() {
   const [scorecards, setScorecards] = useState<PerformanceScorecard[]>(INITIAL_PERFORMANCE_SCORECARDS);
   const [supplierPayments, setSupplierPayments] = useState<SupplierPaymentVoucher[]>(initialSupplierPayments);
   const [journalEntries, setJournalEntries] = useState<JournalEntry[]>([]);
-  const [users, setUsers] = useState<UserAccount[]>(INITIAL_USERS);
-  const [currentUser, setCurrentUser] = useState<UserAccount>(INITIAL_USERS[0]);
+  const [users, setUsers] = useState<UserAccount[]>(() => AuthService.getUsers());
+  const [currentUser, setCurrentUser] = useState<UserAccount | null>(() => {
+    return AuthService.getCurrentUser();
+  });
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    return Boolean(AuthService.getCurrentUser());
+  });
   const [bankAccounts, setBankAccounts] = useState<BankAccount[]>(INITIAL_BANK_ACCOUNTS);
+
+  // Sync and verify session with server on startup
+  useEffect(() => {
+    AuthService.verifySessionWithServer().then((isValid) => {
+      if (!isValid) {
+        setCurrentUser(null);
+        setIsAuthenticated(false);
+      } else {
+        const fresh = AuthService.getCurrentUser();
+        if (fresh) {
+          setCurrentUser(fresh);
+          setIsAuthenticated(true);
+        }
+      }
+    });
+  }, []);
+
+  // Scoped Data Engine for multi-tenant and role-based data isolation
+  const scopedCustomers = React.useMemo(() => filterCustomersByScope(customers, currentUser), [customers, currentUser]);
+  const scopedOrders = React.useMemo(() => filterOrdersByScope(orders, currentUser), [orders, currentUser]);
+  const scopedCrmTasks = React.useMemo(() => filterTasksByScope(crmTasks, currentUser), [crmTasks, currentUser]);
+  const scopedCashTransactions = React.useMemo(() => filterCashTransactionsByScope(cashTransactions, currentUser), [cashTransactions, currentUser]);
 
   const [selectedBranchId, setSelectedBranchId] = useState<string>('BR01');
   const [metrics, setMetrics] = useState<DashboardMetrics>(initialMetrics);
@@ -388,21 +427,6 @@ export default function App() {
         return s;
       })
     );
-  };
-
-  // User Management Handlers
-  const handleSaveUser = (userToSave: UserAccount) => {
-    setUsers((prev) => {
-      const exists = prev.some((u) => u.id === userToSave.id);
-      if (exists) {
-        return prev.map((u) => (u.id === userToSave.id ? userToSave : u));
-      }
-      return [userToSave, ...prev];
-    });
-  };
-
-  const handleDeleteUser = (userId: string) => {
-    setUsers((prev) => prev.filter((u) => u.id !== userId));
   };
 
   // 3. Stock Adjustment Handler
@@ -1397,7 +1421,62 @@ export default function App() {
     }
   };
 
+  // User Management & Auth Session Handlers
+  const handleLoginSuccess = (user: UserAccount) => {
+    setCurrentUser(user);
+    setIsAuthenticated(true);
+    setUsers(AuthService.getUsers());
+  };
+
+  const handleLogout = () => {
+    AuthService.logout(currentUser);
+    setCurrentUser(null);
+    setIsAuthenticated(false);
+  };
+
+  const handleChangeCurrentUser = (user: UserAccount) => {
+    AuthService.setCurrentUser(user);
+    setCurrentUser(user);
+    setIsAuthenticated(true);
+  };
+
+  const handleSaveUser = (user: UserAccount) => {
+    setUsers((prev) => {
+      const exists = prev.some((u) => u.id === user.id);
+      const updated = exists ? prev.map((u) => (u.id === user.id ? user : u)) : [user, ...prev];
+      AuthService.saveUsers(updated);
+      return updated;
+    });
+
+    if (currentUser && currentUser.id === user.id) {
+      setCurrentUser(user);
+      AuthService.setCurrentUser(user);
+    }
+  };
+
+  const handleDeleteUser = (userId: string) => {
+    setUsers((prev) => {
+      const updated = prev.filter((u) => u.id !== userId);
+      AuthService.saveUsers(updated);
+      return updated;
+    });
+
+    if (currentUser && currentUser.id === userId) {
+      handleLogout();
+    }
+  };
+
   const lowStockCount = products.filter((p) => p.isLowStock).length;
+
+  // Render LoginView when not authenticated
+  if (!isAuthenticated || !currentUser) {
+    return (
+      <LoginView
+        onLoginSuccess={handleLoginSuccess}
+        availableUsers={users}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex text-slate-800 font-['Plus_Jakarta_Sans',sans-serif] overflow-x-hidden">
@@ -1408,6 +1487,8 @@ export default function App() {
         lowStockCount={lowStockCount}
         isOpen={isMobileMenuOpen}
         onClose={() => setIsMobileMenuOpen(false)}
+        currentUser={currentUser}
+        onLogout={handleLogout}
       />
 
       {/* Main Content Area */}
@@ -1422,12 +1503,19 @@ export default function App() {
           onToggleMobileMenu={() => setIsMobileMenuOpen((prev) => !prev)}
           currentUser={currentUser}
           users={users}
-          onChangeCurrentUser={setCurrentUser}
+          onChangeCurrentUser={handleChangeCurrentUser}
+          onLogout={handleLogout}
         />
 
         {/* View Routing */}
         <main className="flex-1 overflow-y-auto pb-12">
-          {currentView === 'enterprise-planning' && (
+          <ProtectedViewGuard
+            view={currentView}
+            currentUser={currentUser}
+            onNavigateHome={() => setCurrentView('dashboard')}
+            onSwitchUser={() => setIsAuthenticated(false)}
+          >
+            {currentView === 'enterprise-planning' && (
             <div className="p-4 sm:p-6 max-w-7xl mx-auto">
               <EnterprisePlanningView
                 plans={plans}
@@ -1508,7 +1596,7 @@ export default function App() {
 
           {currentView === 'orders' && (
             <OrdersView
-              orders={orders}
+              orders={scopedOrders}
               onOpenCreateOrder={() => setIsCreateOrderOpen(true)}
               onSelectOrder={handleOpenOrderDetail}
               onOpenVietQr={handleOpenVietQrModal}
@@ -1632,8 +1720,8 @@ export default function App() {
 
           {currentView === 'crm' && (
             <CrmView
-              customers={customers}
-              crmTasks={crmTasks}
+              customers={scopedCustomers}
+              crmTasks={scopedCrmTasks}
               specialOccasions={specialOccasions}
               loyaltyTransactions={loyaltyTransactions}
               users={users}
@@ -1709,7 +1797,7 @@ export default function App() {
 
           {currentView === 'cashflow' && (
             <CashflowView
-              transactions={cashTransactions}
+              transactions={scopedCashTransactions}
               onAddTransaction={handleAddCashTransaction}
             />
           )}
@@ -1731,7 +1819,7 @@ export default function App() {
               warehouses={warehouses}
               onSaveUser={handleSaveUser}
               onDeleteUser={handleDeleteUser}
-              currentUser={users[0]}
+              currentUser={currentUser || users[0]}
             />
           )}
 
@@ -1748,13 +1836,21 @@ export default function App() {
             />
           )}
 
+          {currentView === 'beverages' && <BeveragesView />}
+
+          {currentView === 'marketing' && <MarketingView />}
+
+          {currentView === 'api-integrations' && <ApiIntegrationsView />}
+
           {currentView === 'settings' && (
             <SettingsView
               users={users}
               onSaveUser={handleSaveUser}
               onDeleteUser={handleDeleteUser}
+              currentUser={currentUser || users[0]}
             />
           )}
+          </ProtectedViewGuard>
         </main>
       </div>
 
@@ -1983,7 +2079,7 @@ export default function App() {
         stockTransactions={stockTransactions}
         auditLogs={auditLogs}
         journalEntries={journalEntries}
-        currentUser={{ name: 'Kế toán trưởng / Admin', email: 'admin@sheetstore.vn' }}
+        currentUser={{ name: currentUser?.name || 'Kế toán trưởng / Admin', email: currentUser?.email || 'admin@wiup.vn' }}
         onPostingSuccess={handleInvoiceExtractionSuccess}
         onQuickAddProduct={(draft) => {
           setIsInvoiceExtractionOpen(false);

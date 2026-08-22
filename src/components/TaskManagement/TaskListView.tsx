@@ -46,6 +46,7 @@ export const TaskListView: React.FC<TaskListViewProps> = ({
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [priorityFilter, setPriorityFilter] = useState<string>('all');
   const [staffFilter, setStaffFilter] = useState<string>('all');
+  const [fieldFilter, setFieldFilter] = useState<string>('all');
   const [quickFilter, setQuickFilter] = useState<'all' | 'unupdated' | 'overdue' | 'today'>('all');
 
   // Pagination state (Tính Năng 3)
@@ -60,6 +61,7 @@ export const TaskListView: React.FC<TaskListViewProps> = ({
       (t.title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
       (t.customerName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
       (t.assignedTo || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (t.field || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
       (t.customerCode || '').toLowerCase().includes(searchTerm.toLowerCase());
 
     // Status filter
@@ -70,6 +72,9 @@ export const TaskListView: React.FC<TaskListViewProps> = ({
 
     // Staff filter
     const matchStaff = staffFilter === 'all' || t.assignedTo.includes(staffFilter);
+
+    // Field filter
+    const matchField = fieldFilter === 'all' || (t.field || 'CSKH & Bán hàng') === fieldFilter;
 
     // Quick filter
     let matchQuick = true;
@@ -84,7 +89,7 @@ export const TaskListView: React.FC<TaskListViewProps> = ({
       matchQuick = t.dueDate === '2026-08-21';
     }
 
-    return matchSearch && matchStatus && matchPriority && matchStaff && matchQuick;
+    return matchSearch && matchStatus && matchPriority && matchStaff && matchField && matchQuick;
   });
 
   // Calculate pagination
@@ -225,6 +230,20 @@ export const TaskListView: React.FC<TaskListViewProps> = ({
               ))}
             </select>
 
+            <select
+              value={fieldFilter}
+              onChange={(e) => setFieldFilter(e.target.value)}
+              className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none"
+            >
+              <option value="all">Tất cả lĩnh vực / phòng ban</option>
+              <option value="CSKH & Bán hàng">CSKH & Bán hàng</option>
+              <option value="Kế toán & Tài chính">Kế toán & Tài chính</option>
+              <option value="Mua hàng & Kho vận">Mua hàng & Kho vận</option>
+              <option value="Sản xuất & Kỹ thuật">Sản xuất & Kỹ thuật</option>
+              <option value="Marketing & SEO">Marketing & SEO</option>
+              <option value="Ban Giám Đốc">Ban Giám Đốc</option>
+            </select>
+
             <button
               onClick={() => exportTasksToExcel(filteredTasks, `Danh_Sach_Nhiem_Vu_CRM_${new Date().toISOString().slice(0, 10)}.xlsx`)}
               className="px-3.5 py-2 bg-white hover:bg-slate-50 text-slate-700 font-bold rounded-xl border border-slate-200 shadow-xs flex items-center gap-1.5 transition-all text-xs shrink-0 cursor-pointer"
@@ -361,6 +380,9 @@ export const TaskListView: React.FC<TaskListViewProps> = ({
 
                     {/* Extended tags, Opportunity binding, and recurrence metadata */}
                     <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                      <span className="text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200 px-2 py-0.5 rounded-md flex items-center gap-1">
+                        🏢 {task.field || 'CSKH & Bán hàng'}
+                      </span>
                       {task.opportunityTitle && (
                         <span className="text-[10px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200 px-2 py-0.5 rounded-md flex items-center gap-1">
                           💼 Cơ hội: {task.opportunityTitle}

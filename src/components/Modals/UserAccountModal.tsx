@@ -188,7 +188,7 @@ export const UserAccountModal: React.FC<UserAccountModalProps> = ({
                   <input
                     type="email"
                     required
-                    placeholder="ví dụ: ductang.fbu9@gmail.com"
+                    placeholder="ví dụ: ductang.fbu@gmail.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full pl-9 pr-3 py-2 bg-white border border-slate-300 rounded-xl font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"

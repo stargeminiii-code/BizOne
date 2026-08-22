@@ -96,7 +96,7 @@ export const OmniChannelMarketingPerformance: React.FC<OmniChannelMarketingPerfo
             </h2>
           </div>
           <p className="text-xs text-slate-500 mt-0.5">
-            Dữ liệu tăng trưởng từ Google GenSeo, Shopee, Lazada, TikTok Shop và Facebook B2B đổ trực tiếp về chỉ số Marketing Control Tower.
+            Dữ liệu tăng trưởng từ Google GenSeo, Shopee, Lazada, TikTok Shop và Facebook B2B được tổng hợp trực tiếp về Dashboard.
           </p>
         </div>
 

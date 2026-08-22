@@ -20,7 +20,7 @@ export const VietQrModal: React.FC<VietQrModalProps> = ({
 
   const bankName = 'MBBank (Ngân hàng Quân Đội)';
   const bankAccount = '999988886666';
-  const accountHolder = 'CONG TY CP SHEETSTORE VIET NAM';
+  const accountHolder = 'CONG TY CP BIZONE VIET NAM';
   const transferContent = order ? `THANHTOAN ${order.code}` : '';
 
   const formatVND = (value: number) => {

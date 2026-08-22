@@ -26,6 +26,7 @@ import {
 import { UserAccount, UserRole } from '../types';
 import { ROLE_DEFINITIONS } from '../data/userData';
 import { UserAccountModal } from './Modals/UserAccountModal';
+import { APP_NAME, APP_TAGLINE, COMPANY_NAME } from '../constants/appConfig';
 
 interface SettingsViewProps {
   users?: UserAccount[];
@@ -67,7 +68,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
-              Cài Đặt Hệ Thống BizOne ERP
+              Cài Đặt Hệ Thống {APP_NAME}
             </h1>
             <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-blue-50 text-blue-700 border border-blue-200">
               v2.8 Enterprise
@@ -379,7 +380,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
           <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <p className="font-extrabold text-slate-900 text-xs">Sheet: "SheetStore_Data_2023_Live.xlsx"</p>
+              <p className="font-extrabold text-slate-900 text-xs">Sheet: "BizOne_ERP_Data_2024.xlsx"</p>
               <p className="text-slate-500 text-[11px] mt-0.5">
                 Tự động ghi nhận đơn bán hàng, phiếu thu chi và tồn kho vào bảng tính Google Drive.
               </p>

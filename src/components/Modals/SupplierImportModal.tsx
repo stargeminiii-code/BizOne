@@ -39,7 +39,7 @@ NCC000006,Xưởng Cơ Khí Đúc Đồng Hải Phòng,,0912 333 444,ducphong@gm
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.setAttribute('href', url);
-    link.setAttribute('download', 'Mau_Nhap_Nha_Cung_Cap_SheetStore.csv');
+    link.setAttribute('download', 'Mau_Nhap_Nha_Cung_Cap_BizOne.csv');
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

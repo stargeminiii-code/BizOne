@@ -220,6 +220,110 @@ export const ROLE_DEFINITIONS: Record<
       settings: []
     }
   },
+  marketing: {
+    name: 'Chuyên viên Marketing & Chiến dịch',
+    description: 'Quản lý chiến dịch quảng cáo, voucher, khuyến mại, lead và phân tích hiệu quả kênh bán.',
+    badgeColor: 'bg-pink-50 text-pink-700 border-pink-200',
+    defaultPermissions: {
+      dashboard: ['view', 'export'],
+      products: ['view'],
+      purchasing: [],
+      issues: [],
+      transfers: [],
+      stocktakes: [],
+      fifo_lots: [],
+      customers: ['view', 'create', 'edit', 'export'],
+      suppliers: [],
+      debt_receivables: ['view'],
+      debt_payables: [],
+      cashflow: [],
+      reports: ['view', 'export'],
+      banking_vietqr: [],
+      user_management: [],
+      automation_engine: ['view', 'edit'],
+      api_integrations: ['view'],
+      marketing: ['view', 'create', 'edit', 'export'],
+      settings: []
+    }
+  },
+  retail_staff: {
+    name: 'Nhân viên Bán Lẻ / POS Thu Ngân',
+    description: 'Bán hàng tại quầy POS, in hóa đơn, trừ tồn kho tự động và thu tiền VietQR/tiền mặt.',
+    badgeColor: 'bg-amber-50 text-amber-700 border-amber-200',
+    defaultPermissions: {
+      dashboard: ['view'],
+      products: ['view'],
+      purchasing: [],
+      issues: ['view', 'create'],
+      transfers: [],
+      stocktakes: [],
+      fifo_lots: [],
+      customers: ['view', 'create'],
+      suppliers: [],
+      debt_receivables: ['view'],
+      debt_payables: [],
+      cashflow: ['view', 'create'],
+      reports: ['view'],
+      banking_vietqr: ['view', 'create'],
+      user_management: [],
+      automation_engine: [],
+      api_integrations: [],
+      beverages: ['view', 'create'],
+      settings: []
+    }
+  },
+  online_staff: {
+    name: 'Chuyên viên Vận Hành Online / TMĐT',
+    description: 'Xử lý đơn hàng Shopee, TikTok Shop, Website, quản lý SKU mapping và trạng thái giao vận.',
+    badgeColor: 'bg-orange-50 text-orange-700 border-orange-200',
+    defaultPermissions: {
+      dashboard: ['view'],
+      products: ['view', 'edit'],
+      purchasing: [],
+      issues: ['view', 'create'],
+      transfers: [],
+      stocktakes: [],
+      fifo_lots: ['view'],
+      customers: ['view', 'create'],
+      suppliers: [],
+      debt_receivables: ['view'],
+      debt_payables: [],
+      cashflow: ['view'],
+      reports: ['view'],
+      banking_vietqr: ['view'],
+      user_management: [],
+      automation_engine: ['view'],
+      api_integrations: ['view', 'create', 'edit'],
+      settings: []
+    }
+  },
+  demo: {
+    name: 'Tài khoản Trải Nghiệm (Demo Sandbox)',
+    description: 'Môi trường sandbox thử nghiệm đầy đủ tính năng BizOne ERP trên bộ dữ liệu Demo biệt lập, an toàn 100%.',
+    badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-300',
+    defaultPermissions: {
+      dashboard: ['view', 'export'],
+      products: ['view', 'create', 'edit', 'export'],
+      purchasing: ['view', 'create', 'edit', 'export'],
+      issues: ['view', 'create', 'edit', 'export'],
+      transfers: ['view', 'create', 'edit', 'export'],
+      stocktakes: ['view', 'create', 'edit', 'export'],
+      fifo_lots: ['view', 'export'],
+      customers: ['view', 'create', 'edit', 'export'],
+      suppliers: ['view', 'create', 'edit', 'export'],
+      debt_receivables: ['view', 'create', 'edit', 'export'],
+      debt_payables: ['view', 'create', 'edit', 'export'],
+      cashflow: ['view', 'create', 'edit', 'export'],
+      reports: ['view', 'export'],
+      banking_vietqr: ['view', 'create'],
+      user_management: ['view'],
+      automation_engine: ['view'],
+      api_integrations: ['view'],
+      beverages: ['view', 'create', 'edit'],
+      marketing: ['view', 'create'],
+      settings: ['view']
+    }
+  },
   custom: {
     name: 'Tùy chỉnh riêng biệt',
     description: 'Cấu hình phân quyền chi tiết thủ công cho từng phân hệ.',
@@ -250,11 +354,12 @@ export const ROLE_DEFINITIONS: Record<
 export const INITIAL_USERS: UserAccount[] = [
   {
     id: 'usr-admin-ductang',
-    username: 'ductang',
-    email: 'ductang.fbu9@gmail.com',
-    name: 'Đức Tăng',
+    username: '0968994439', // Master prompt login: 0968994439 / Abcd@1234
+    email: 'ductang.fbu@gmail.com', // Primary admin email
+    name: 'Đức Tăng (Super Admin)',
     employeeCode: 'NV-0001',
-    phone: '0988 888 999',
+    phone: '0968994439',
+    tenant: 'enterprise',
     department: 'Ban Giám Đốc & Hội đồng Quản trị',
     position: 'Chủ tịch HĐQT & Kiến trúc sư Trưởng',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80',
@@ -273,7 +378,7 @@ export const INITIAL_USERS: UserAccount[] = [
     failedLoginAttempts: 0,
     telegramUsername: '@ductang_erp',
     telegramChatId: '992817462',
-    zaloPhone: '0988888999',
+    zaloPhone: '0968994439',
     permissions: ROLE_DEFINITIONS.super_admin.defaultPermissions,
     sessions: [
       {
@@ -288,24 +393,54 @@ export const INITIAL_USERS: UserAccount[] = [
         loginAt: '2026-08-16 07:30',
         lastActive: 'Vừa xong',
         isCurrent: true
-      },
-      {
-        id: 'sess-2',
-        userId: 'usr-admin-ductang',
-        deviceName: 'iPhone 15 Pro Max',
-        deviceType: 'mobile',
-        os: 'iOS 18.1',
-        browser: 'BizOne ERP App v2.8',
-        ipAddress: '14.232.199.88',
-        location: 'Hà Nội, Việt Nam',
-        loginAt: '2026-08-15 19:40',
-        lastActive: '3 giờ trước',
-        isCurrent: false
       }
     ],
     createdAt: '2026-01-01 08:00',
     lastActive: 'Đang trực tuyến',
     notes: 'Tài khoản Quản trị viên cấp cao có toàn quyền cấu hình hạ tầng và phê duyệt hệ thống.'
+  },
+  {
+    id: 'usr-demo-01',
+    username: 'demo', // Master prompt login: demo / demo
+    email: 'demo@bizone.vn',
+    name: 'Người Dùng Trải Nghiệm (Demo Sandbox)',
+    employeeCode: 'DEMO-001',
+    phone: '0900000000',
+    tenant: 'demo',
+    department: 'Môi Trường Trải Nghiệm Demo',
+    position: 'Trải Nghiệm Toàn Diện (Demo User)',
+    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&auto=format&fit=crop&q=80',
+    role: 'demo',
+    roleTitle: 'Tài Khoản Trải Nghiệm Demo Sandbox',
+    managementLevel: 'ceo_chairman',
+    dataScope: 'company_wide',
+    division: 'Môi Trường Dữ Liệu Demo',
+    status: 'active',
+    branchId: 'BR01',
+    branchName: 'Chi nhánh Hà Nội (Demo)',
+    assignedWarehouseIds: ['ALL', 'WH01', 'WH02', 'WH03'],
+    twoFactorEnabled: false,
+    forcePasswordChange: false,
+    failedLoginAttempts: 0,
+    permissions: ROLE_DEFINITIONS.demo.defaultPermissions,
+    sessions: [
+      {
+        id: 'sess-demo',
+        userId: 'usr-demo-01',
+        deviceName: 'Web Browser Demo',
+        deviceType: 'desktop',
+        os: 'WebOS',
+        browser: 'Chrome 128.0',
+        ipAddress: '127.0.0.1',
+        location: 'Demo Environment',
+        loginAt: '2026-08-16 08:00',
+        lastActive: 'Vừa xong',
+        isCurrent: true
+      }
+    ],
+    createdAt: '2026-01-01 00:00',
+    lastActive: 'Đang trực tuyến',
+    notes: 'Tài khoản trải nghiệm sandbox biệt lập. Mọi thao tác thử nghiệm không ảnh hưởng đến dữ liệu doanh nghiệp.'
   },
   {
     id: 'usr-ceo-01',
@@ -358,7 +493,7 @@ export const INITIAL_USERS: UserAccount[] = [
   {
     id: 'usr-admin-01',
     username: 'thuthao.admin',
-    email: 'admin@sheetstore.vn',
+    email: 'admin@wiup.vn',
     name: 'Nguyễn Thu Thảo',
     employeeCode: 'NV-0003',
     phone: '0909 123 456',
@@ -387,7 +522,7 @@ export const INITIAL_USERS: UserAccount[] = [
   {
     id: 'usr-kho-01',
     username: 'vanan.kho',
-    email: 'kho.hanoi@sheetstore.vn',
+    email: 'kho.hanoi@wiup.vn',
     name: 'Nguyễn Văn An',
     employeeCode: 'NV-0004',
     phone: '0912 345 678',
@@ -417,7 +552,7 @@ export const INITIAL_USERS: UserAccount[] = [
   {
     id: 'usr-ketoan-01',
     username: 'maiphuong.kt',
-    email: 'ketoan@sheetstore.vn',
+    email: 'ketoan@wiup.vn',
     name: 'Phạm Mai Phương',
     employeeCode: 'NV-0005',
     phone: '0987 654 321',
@@ -448,7 +583,7 @@ export const INITIAL_USERS: UserAccount[] = [
   {
     id: 'usr-sales-01',
     username: 'hoangnam.sales',
-    email: 'sales.hcm@sheetstore.vn',
+    email: 'sales.hcm@wiup.vn',
     name: 'Lê Hoàng Nam',
     employeeCode: 'NV-0006',
     phone: '0933 987 654',
@@ -479,7 +614,7 @@ export const INITIAL_USERS: UserAccount[] = [
   {
     id: 'usr-sales-staff-01',
     username: 'minhtuan.sales',
-    email: 'minhtuan.sales@sheetstore.vn',
+    email: 'minhtuan.sales@wiup.vn',
     name: 'Trần Minh Tuấn',
     employeeCode: 'NV-0008',
     phone: '0977 112 233',
@@ -507,7 +642,7 @@ export const INITIAL_USERS: UserAccount[] = [
   {
     id: 'usr-thumua-01',
     username: 'vanhung.tm',
-    email: 'thumua@sheetstore.vn',
+    email: 'thumua@wiup.vn',
     name: 'Trần Văn Hùng',
     employeeCode: 'NV-0007',
     phone: '0944 555 666',
@@ -558,5 +693,7 @@ export const MODULE_LIST: {
   { key: 'user_management', name: 'Tài khoản & Phân quyền', category: 'Hệ Thống', icon: 'Shield', description: 'Thêm người dùng, phân vai trò, gán kho và quản lý phiên' },
   { key: 'automation_engine', name: 'Tự động hóa & Nhắc việc', category: 'Hệ Thống', icon: 'Bot', description: 'Cấu hình kịch bản tự động nhắc nợ, cảnh báo tồn kho qua Telegram/Zalo' },
   { key: 'api_integrations', name: 'API Gateway & Tích hợp', category: 'Hệ Thống', icon: 'Globe', description: 'Quản lý API Key, Webhook, kết nối App Mobile/Web và Email/Zalo OA' },
+  { key: 'beverages', name: 'Đồ Uống & Recipe BOM', category: 'Sản Phẩm & F&B', icon: 'Coffee', description: 'Công thức pha chế, định lượng nguyên liệu và tự động trừ kho' },
+  { key: 'marketing', name: 'Marketing & Khuyến mại', category: 'Kinh Doanh', icon: 'Megaphone', description: 'Chiến dịch marketing, voucher giảm giá và đo lường ROI' },
   { key: 'settings', name: 'Cài đặt Doanh nghiệp', category: 'Hệ Thống', icon: 'Settings', description: 'Thông tin công ty, chi nhánh và cấu hình chung' }
 ];
