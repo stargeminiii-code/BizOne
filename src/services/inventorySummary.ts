@@ -1,5 +1,5 @@
 import type { InventoryLayer, Product, StockTransaction } from '../types';
-import { inventoryEngine, type InventoryTransaction, type StockBalance } from './inventoryEngine';
+import { inventoryEngine, type StockBalance } from './inventoryEngine';
 
 export type InventorySummary = {
   skuCount: number;
@@ -33,8 +33,13 @@ export function buildInventorySummary(args: {
 
   const active = inventoryLots.filter(l => qty(l) > 0 && l.status !== 'locked');
   const stockBySku = new Map<string, { productName: string; quantity: number; fifoValue: number }>();
+
   for (const layer of active) {
-    const current = stockBySku.get(layer.sku) || { productName: layer.productName, quantity: 0, fifoValue: 0 };
+    const current = stockBySku.get(layer.sku) || {
+      productName: layer.productName,
+      quantity: 0,
+      fifoValue: 0
+    };
     current.quantity += qty(layer);
     current.fifoValue += qty(layer) * cost(layer);
     stockBySku.set(layer.sku, current);
@@ -53,9 +58,17 @@ export function buildInventorySummary(args: {
     return sum + (now - received >= threshold ? qty(layer) * cost(layer) : 0);
   }, 0);
 
-  const cogs = normalized
+  const cogsBySku = normalized
     .filter(t => t.type === 'SALES_ISSUE' && t.status === 'posted')
-    .reduce((sum, t) => sum + t.totalCost, 0);
+    .reduce((map, t) => {
+      map.set(t.sku, (map.get(t.sku) || 0) + t.totalCost);
+      return map;
+    }, new Map<string, number>());
+
+  const topCogs = [...cogsBySku.entries()]
+    .map(([sku, cogs]) => ({ sku, cogs }))
+    .sort((a, b) => b.cogs - a.cogs)
+    .slice(0, 5);
 
   return {
     skuCount: stockBySku.size,
@@ -65,26 +78,13 @@ export function buildInventorySummary(args: {
     lowStockSkuCount,
     outOfStockSkuCount,
     agedValue,
-    cogs,
+    cogs: [...cogsBySku.values()].reduce((sum, value) => sum + value, 0),
     integrity,
     topStock: [...stockBySku.entries()]
       .map(([sku, value]) => ({ sku, ...value }))
       .sort((a, b) => b.fifoValue - a.fifoValue)
       .slice(0, 5),
-    topCogs: normalized
-      .filter(t => t.type === 'SALES_ISSUE' && t.status === 'posted')
-      .reduce((map, t) => {
-        map.set(t.sku, (map.get(t.sku) || 0) + t.totalCost);
-        return map;
-      }, new Map<string, number>())
-      ? [...normalized.filter(t => t.type === 'SALES_ISSUE' && t.status === 'posted').reduce((map, t) => {
-          map.set(t.sku, (map.get(t.sku) || 0) + t.totalCost);
-          return map;
-        }, new Map<string, number>()).entries()]
-          .map(([sku, cogs]) => ({ sku, cogs }))
-          .sort((a, b) => b.cogs - a.cogs)
-          .slice(0, 5)
-      : []
+    topCogs
   };
 }
 
