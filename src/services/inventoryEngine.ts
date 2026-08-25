@@ -71,28 +71,13 @@ const n = (value: unknown) => {
 const layerQty = (layer: InventoryLayer) => n(layer.quantityRemaining ?? layer.remainingQuantity);
 const layerCost = (layer: InventoryLayer) => n(layer.purchasePrice ?? layer.costPrice);
 
-const transactionSign = (type: InventoryTransactionType) => {
-  switch (type) {
-    case 'PURCHASE_RECEIPT':
-    case 'TRANSFER_IN':
-    case 'SALES_RETURN':
-    case 'ADJUSTMENT_IN':
-    case 'OPENING_BALANCE':
-      return 1;
-    default:
-      return -1;
-  }
-};
-
 export const inventoryEngine = {
-  /** Build deterministic stock balances from posted ledger transactions + active FIFO layers. */
   buildStockBalances(
     transactions: InventoryTransaction[],
     layers: InventoryLayer[],
     reservedByKey: Record<string, number> = {}
   ): StockBalance[] {
     const map = new Map<string, StockBalance>();
-
     const ensure = (sku: string, warehouseId: string, seed?: Partial<StockBalance>) => {
       const key = `${warehouseId}::${sku}`;
       if (!map.has(key)) {
@@ -110,8 +95,7 @@ export const inventoryEngine = {
           reserved: n(reservedByKey[key]),
           available: 0,
           fifoValue: 0,
-          nextFifoCost: 0,
-          lastMovementAt: undefined
+          nextFifoCost: 0
         });
       }
       return map.get(key)!;
@@ -139,18 +123,17 @@ export const inventoryEngine = {
         branchId: layer.branchId
       });
       row.fifoValue += qty * layerCost(layer);
-      if (row.nextFifoCost === 0 || (layer.receivedAt || '') < (row.lastMovementAt || '9999')) {
+      const receivedAt = layer.receivedAt || layer.createdAt || '';
+      if (row.nextFifoCost === 0 || receivedAt < (row.lastMovementAt || '9999')) {
         row.nextFifoCost = layerCost(layer);
       }
     }
 
     for (const row of map.values()) {
-      // When a legacy dataset has layers but no ledger, layers are the authoritative fallback.
       if (row.onHand === 0 && row.fifoValue > 0) {
-        const matchingQty = layers
+        row.onHand = layers
           .filter(l => l.sku === row.sku && l.warehouseId === row.warehouseId)
           .reduce((sum, l) => sum + Math.max(0, layerQty(l)), 0);
-        row.onHand = matchingQty;
       }
       row.available = row.onHand - row.reserved;
     }
@@ -158,10 +141,9 @@ export const inventoryEngine = {
     return [...map.values()].sort((a, b) => a.sku.localeCompare(b.sku) || a.warehouseId.localeCompare(b.warehouseId));
   },
 
-  /** Convert the existing StockTransaction shape into the normalized ledger model. */
   normalizeLegacyTransactions(transactions: StockTransaction[]): InventoryTransaction[] {
     return transactions.map((tx, index) => {
-      const type =
+      const type: InventoryTransactionType =
         tx.type === 'Nhập kho' ? 'PURCHASE_RECEIPT' :
         tx.type === 'Xuất bán' ? 'SALES_ISSUE' :
         tx.type === 'Xuất chuyển kho' ? 'TRANSFER_OUT' :
@@ -193,7 +175,6 @@ export const inventoryEngine = {
     });
   },
 
-  /** Reconcile ledger, FIFO and computed balance. No mutation is performed. */
   reconcile(
     transactions: InventoryTransaction[],
     layers: InventoryLayer[],
@@ -201,7 +182,6 @@ export const inventoryEngine = {
   ): InventoryReconciliationRow[] {
     const ledger = new Map<string, number>();
     const fifo = new Map<string, number>();
-
     for (const tx of transactions.filter(t => t.status === 'posted')) {
       const key = `${tx.warehouseId}::${tx.sku}`;
       ledger.set(key, (ledger.get(key) || 0) + n(tx.quantityIn) - n(tx.quantityOut));
@@ -214,7 +194,9 @@ export const inventoryEngine = {
 
     const keys = new Set([...ledger.keys(), ...fifo.keys(), ...(balances || []).map(b => b.key)]);
     return [...keys].map(key => {
-      const [warehouseId, sku] = key.split('::');
+      const separator = key.indexOf('::');
+      const warehouseId = separator >= 0 ? key.slice(0, separator) : key;
+      const sku = separator >= 0 ? key.slice(separator + 2) : '';
       const ledgerQuantity = ledger.get(key) || 0;
       const fifoQuantity = fifo.get(key) || 0;
       const balanceQuantity = balances?.find(b => b.key === key)?.onHand ?? fifoQuantity;
@@ -245,6 +227,6 @@ export const inventoryEngine = {
   },
 
   getSignedQuantity(transaction: InventoryTransaction) {
-    return (n(transaction.quantityIn) - n(transaction.quantityOut)) * transactionSign(transaction.type);
+    return n(transaction.quantityIn) - n(transaction.quantityOut);
   }
 };
