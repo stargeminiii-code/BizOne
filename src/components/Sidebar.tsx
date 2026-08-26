@@ -27,7 +27,7 @@ const accentColor = () => {
 };
 
 export const Sidebar: React.FC<SidebarProps> = ({ currentView, onSelectView, isOpen=false, onClose, currentUser, onLogout }) => {
-  const { language, t } = useLanguage();
+  const { language } = useLanguage();
   const [compact, setCompact] = useState(() => localStorage.getItem('bizone_sidebar_compact') === 'true');
   const [open, setOpen] = useState<string | null>(null);
   const [accent, setAccent] = useState(accentColor);
@@ -37,27 +37,29 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, onSelectView, isO
     const refresh = () => setAccent(accentColor());
     window.addEventListener('storage', refresh);
     window.addEventListener('bizone-accent-change', refresh as EventListener);
-    return () => { window.removeEventListener('storage', refresh); window.removeEventListener('bizone-accent-change', refresh as EventListener); };
+    return () => {
+      window.removeEventListener('storage', refresh);
+      window.removeEventListener('bizone-accent-change', refresh as EventListener);
+    };
   }, []);
 
   const ws = useMemo<Workspace[]>(() => [
     { id:'sales', label:language==='vi'?'Bán hàng':'Sales', icon:ShoppingCart, view:'orders', children:[
-      {id:'orders',label:language==='vi'?'Đơn hàng':'Orders',view:'orders'},
-      {id:'pos',label:language==='vi'?'Bán tại quầy':'Counter sale',view:'pos'}
+      {id:'orders', label:language==='vi'?'Đơn hàng':'Orders', view:'orders'}
     ]},
     { id:'crm', label:language==='vi'?'CRM & Khách hàng':'CRM & Customers', icon:Users, view:'crm' },
     { id:'finance', label:language==='vi'?'Tài chính & Kế toán':'Finance & Accounting', icon:Calculator, view:'cashflow', children:[
-      {id:'cashflow',label:language==='vi'?'Dòng tiền':'Cash flow',view:'cashflow'},
-      {id:'pnl',label:language==='vi'?'Lãi lỗ':'P&L',view:'pnl'},
-      {id:'banking',label:language==='vi'?'Tài khoản thanh toán':'Banking',view:'banking'}
+      {id:'cashflow', label:language==='vi'?'Dòng tiền':'Cash flow', view:'cashflow'},
+      {id:'pnl', label:language==='vi'?'Lãi lỗ':'P&L', view:'pnl'},
+      {id:'banking', label:language==='vi'?'Tài khoản thanh toán':'Banking', view:'banking'}
     ]},
     { id:'ccu', label:'CCU', icon:Boxes, view:'inventory', children:[
-      {id:'inventory',label:language==='vi'?'Kho & FIFO':'Inventory & FIFO',view:'inventory'},
-      {id:'products',label:language==='vi'?'Sản phẩm & SKU':'Products & SKU',view:'variant-definitions'},
-      {id:'purchasing',label:language==='vi'?'Mua hàng':'Purchasing',view:'purchasing'},
-      {id:'suppliers',label:language==='vi'?'Nhà cung cấp':'Suppliers',view:'suppliers'},
-      {id:'recipes',label:language==='vi'?'Công thức & BOM':'Recipes & BOM',view:'beverages'},
-      {id:'fifo',label:language==='vi'?'Lô FIFO':'FIFO lots',view:'warehouse-fifo-lots'}
+      {id:'inventory', label:language==='vi'?'Kho & FIFO':'Inventory & FIFO', view:'inventory'},
+      {id:'products', label:language==='vi'?'Sản phẩm & SKU':'Products & SKU', view:'variant-definitions'},
+      {id:'purchasing', label:language==='vi'?'Mua hàng':'Purchasing', view:'purchasing'},
+      {id:'suppliers', label:language==='vi'?'Nhà cung cấp':'Suppliers', view:'suppliers'},
+      {id:'recipes', label:language==='vi'?'Công thức & BOM':'Recipes & BOM', view:'beverages'},
+      {id:'fifo', label:language==='vi'?'Lô FIFO':'FIFO lots', view:'warehouse-fifo-lots'}
     ]},
     { id:'marketing', label:language==='vi'?'Marketing':'Marketing', icon:Megaphone, view:'marketing' }
   ], [language]);
@@ -79,18 +81,40 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, onSelectView, isO
       </div>
 
       <nav className="flex-1 overflow-y-auto px-2 py-3 space-y-1">
-        <button onClick={()=>nav('dashboard')} className={`${base} ${currentView==='dashboard'?'text-white font-semibold':'text-slate-700 hover:bg-slate-50'}`} style={currentView==='dashboard'?{backgroundColor:accent}:undefined} title="Dashboard"><LayoutDashboard className="w-4 h-4" strokeWidth={1.8}/>{!compact&&<span>Dashboard</span>}</button>
-        {ws.map(w=>{ const isActive=active(w); const expanded=open===w.id||isActive; const Icon=w.icon; return <div key={w.id}>
-          <div className="flex items-center gap-1">
-            <button onClick={()=>nav(w.view,w.id)} className={`${base} flex-1 ${isActive?'text-white font-semibold':'text-slate-700 hover:bg-slate-50'}`} style={isActive?{backgroundColor:accent}:undefined} title={w.label}><Icon className="w-4 h-4 shrink-0" strokeWidth={1.8}/>{!compact&&<span className="truncate">{w.label}</span>}</button>
-            {!compact&&w.children&&<button onClick={()=>setOpen(x=>x===w.id?null:w.id)} className="p-1.5 text-slate-400 hover:text-slate-700"><ChevronDown className={`w-3.5 h-3.5 ${expanded?'rotate-180':''}`}/></button>}
+        <button onClick={()=>nav('dashboard')} className={`${base} ${currentView==='dashboard'?'text-white font-semibold':'text-slate-700 hover:bg-slate-50'}`} style={currentView==='dashboard'?{backgroundColor:accent}:undefined}>
+          <LayoutDashboard className="w-4 h-4" strokeWidth={1.8}/>{!compact&&<span>Dashboard</span>}
+        </button>
+
+        {ws.map(w=>{ 
+          const isActive=active(w); 
+          const expanded=open===w.id||isActive; 
+          const Icon=w.icon;
+          return <div key={w.id}>
+            <div className="flex items-center gap-1">
+              <button onClick={()=>nav(w.view,w.id)} className={`${base} flex-1 ${isActive?'text-white font-semibold':'text-slate-700 hover:bg-slate-50'}`} style={isActive?{backgroundColor:accent}:undefined} title={w.label}>
+                <Icon className="w-4 h-4 shrink-0" strokeWidth={1.8}/>{!compact&&<span className="truncate">{w.label}</span>}
+              </button>
+              {!compact&&w.children&&<button onClick={()=>setOpen(x=>x===w.id?null:w.id)} className="p-1.5 text-slate-400 hover:text-slate-700" aria-label={expanded?'Thu gọn':'Mở rộng'}>
+                <ChevronDown className={`w-3.5 h-3.5 ${expanded?'rotate-180':''}`}/>
+              </button>}
+            </div>
+            {!compact&&w.children&&expanded&&
+              <div className="ml-7 mt-0.5 border-l border-slate-200 pl-2 space-y-0.5">
+                {w.children.map(c=>
+                  <button key={c.id} onClick={()=>nav(c.view,w.id)} className={`w-full px-2.5 py-1.5 rounded text-xs text-left ${currentView===c.view?'font-semibold text-slate-900 bg-slate-50':'text-slate-500 hover:text-slate-800 hover:bg-slate-50'}`}>
+                    {c.label}
+                  </button>
+                )}
+              </div>
+            }
           </div>
-          {!compact&&w.children&&expanded&&<div className="ml-7 mt-0.5 border-l border-slate-200 pl-2 space-y-0.5">{w.children.map(c=><button key={c.id} onClick={()=>nav(c.view,w.id)} className={`w-full px-2.5 py-1.5 rounded text-xs text-left ${currentView===c.view?'font-semibold text-slate-900 bg-slate-50':'text-slate-500 hover:text-slate-800 hover:bg-slate-50'}`}>{c.label}</button>)}</div>}
-        </div>})}
+        })}
       </nav>
 
       <div className="border-t border-slate-200 p-2 space-y-1 shrink-0">
-        <button onClick={()=>nav('settings')} className={`${base} ${currentView==='settings'?'text-white font-semibold':'text-slate-500 hover:bg-slate-50'}`} style={currentView==='settings'?{backgroundColor:accent}:undefined}><Settings className="w-4 h-4" strokeWidth={1.8}/>{!compact&&<span>{language==='vi'?'Cài đặt':'Settings'}</span>}</button>
+        <button onClick={()=>nav('settings')} className={`${base} ${currentView==='settings'?'text-white font-semibold':'text-slate-500 hover:bg-slate-50'}`} style={currentView==='settings'?{backgroundColor:accent}:undefined}>
+          <Settings className="w-4 h-4" strokeWidth={1.8}/>{!compact&&<span>{language==='vi'?'Cài đặt':'Settings'}</span>}
+        </button>
         {currentUser&&!compact&&<div className="px-3 py-2 border-t border-slate-100 text-xs"><div className="font-medium text-slate-800 truncate">{currentUser.name}</div><div className="text-[10px] text-slate-400 truncate">{currentUser.role}</div></div>}
         {onLogout&&<button onClick={onLogout} className={`${base} text-slate-500 hover:text-red-600 hover:bg-slate-50`}><LogOut className="w-4 h-4" strokeWidth={1.8}/>{!compact&&<span>{language==='vi'?'Đăng xuất':'Log out'}</span>}</button>}
       </div>
